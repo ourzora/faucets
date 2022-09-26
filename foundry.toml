@@ -1,0 +1,18 @@
+[profile.default]
+auto_detect_solc = true
+libs = ['lib', 'node_modules']
+optimizer = true
+optimizer_runs = 500000
+out = 'dist/artifacts'
+src = 'src'
+test = 'test'
+fs_permissions = [{ access = "read-write", path = "./"}]
+
+[rpc_endpoints]
+goerli = "${GOERLI_RPC_URL}"
+mainnet = "${MAINNET_RPC_URL}"
+
+[etherscan]
+goerli = { key = "${ETHERSCAN_KEY}" }
+mainnet = { key = "${ETHERSCAN_KEY}" }
+

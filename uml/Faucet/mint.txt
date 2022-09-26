@@ -1,0 +1,26 @@
+@startuml
+actor Caller
+participant Faucet
+participant ERC20Token
+
+Caller -> Faucet : mint()
+
+alt Faucet Strategy is valid?
+
+    noop
+
+else
+
+    Faucet -> Caller : revert
+
+end
+
+Faucet -> Faucet : mint new faucet token
+
+Faucet -> ERC20Token : transfer caller's erc-20 tokens into escrow
+
+Faucet -> Faucet : store faucet details
+
+Faucet -> Caller : return minted token ID
+
+@enduml

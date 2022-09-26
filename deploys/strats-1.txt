@@ -1,0 +1,3 @@
+LinearStrategy: 0xca734042f60dcb45363622571eae8a08e09c4d0e
+CliffStrategy: 0x8ea04aa8aa5174fe641fde342e740ea167d25fed
+DailyStepStrategy: 0x53d83fdd793db21161c4bd663cb7382dafc90626

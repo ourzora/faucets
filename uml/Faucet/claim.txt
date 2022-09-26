@@ -1,0 +1,33 @@
+@startuml
+actor Caller
+participant Faucet
+participant FaucetStrategy
+participant ERC20Token
+
+Caller -> Faucet : claim()
+
+alt Caller is faucet token owner?
+
+    noop
+
+else
+
+    Faucet -> Caller : revert
+
+end
+
+Faucet -> FaucetStrategy : get claimable token amount
+
+Faucet -> ERC20Token : transfer claimable erc-20 tokens to caller
+
+alt are there remaining tokens to be claimed for this faucet?
+
+    Faucet -> Faucet : update faucet details
+
+else
+
+    Faucet -> Faucet : burn empty faucet
+
+end
+
+@enduml

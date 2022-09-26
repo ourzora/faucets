@@ -1,0 +1,4 @@
+FaucetMetadataRenderer: 0xcd8fc518f8228f2266c7c53643d7dddac4088ca5
+ERC20Faucet implementation: 0xac83e8d852f316eb2dd85e806c1b61b682e32499
+ETHFaucet implementation: 0x8e5a4cd78c5960285c9f9a2efd9142e9930cad4f
+FaucetFactory: 0xd6239b155eb29a34b7e277d89f2801c614f41021

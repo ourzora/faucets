@@ -1,0 +1,55 @@
+{
+  "name": "faucets",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "tbtstl <t@zora.co>",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.6",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/contracts-upgradeable": "^4.5.2",
+    "@typechain/ethers-v5": "^10.0.0",
+    "@typechain/hardhat": "^6.0.0",
+    "@types/chai": "^4.3.1",
+    "@types/data-urls": "^2.0.1",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^17.0.40",
+    "chai": "^4.3.6",
+    "data-urls": "^3.0.2",
+    "dotenv": "^16.0.1",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.8",
+    "hardhat": "^2.9.7",
+    "hardhat-preprocessor": "^0.1.4",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.2",
+    "prettier-plugin-solidity": "^1.0.0-beta.18",
+    "solhint": "^3.3.6",
+    "solhint-plugin-prettier": "^0.0.5"
+  },
+  "lint-staged": {
+    "*.{ts,js,css,md,sol}": "prettier --write",
+    "*.sol": "solhint"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "build": "forge build",
+    "test": "forge clean && forge test",
+    "render-test": "hardhat test",
+    "deployDeps:goerli": "source .env && CHAIN_ID=5 forge script ./src/scripts/DeployDeps.s.sol:DeployDeps --rpc-url $GOERLI_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 5  --broadcast --verify -vvvvv",
+    "deploy:goerli": "source .env && CHAIN_ID=5 forge script ./src/scripts/Deploy.s.sol:Deploy --rpc-url $GOERLI_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 5  --broadcast --verify -vvvvv",
+    "deployStrats:goerli": "source .env && CHAIN_ID=5 forge script ./src/scripts/DeployStrategies.s.sol:DeployStrategies --rpc-url $GOERLI_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 5  --broadcast --verify -vvvvv",
+    "deploy:mainnet": "source .env && CHAIN_ID=1 forge script ./src/scripts/Deploy.s.sol:Deploy --rpc-url $MAINNET_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 1  --broadcast --verify -vvvvv",
+    "deployStrats:mainnet": "source .env && CHAIN_ID=1 forge script ./src/scripts/DeployStrategies.s.sol:DeployStrategies --rpc-url $MAINNET_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 1  --broadcast --verify -vvvvv"
+  },
+  "dependencies": {
+    "@zoralabs/nft-editions-contracts": "^1.0.3",
+    "@zoralabs/zorb-contracts": "^1.0.0",
+    "base64-sol": "^1.1.0",
+    "ts-node": "^10.8.1",
+    "typechain": "^8.0.0",
+    "typescript": "^4.7.3"
+  }
+}
