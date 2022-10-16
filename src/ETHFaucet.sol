@@ -11,7 +11,6 @@ contract ETHFaucet is IFaucet, ERC721Upgradeable {
     uint256 public totalSupply;
     uint256 mintCounter;
     mapping(uint256 => FaucetDetails) internal faucetDetailsForToken;
-    mapping(uint256 => uint256) public claimedAmountForToken;
     IFaucetMetadataRenderer public immutable metadataRenderer;
 
     constructor(IFaucetMetadataRenderer _metadataRenderer) {
@@ -47,7 +46,7 @@ contract ETHFaucet is IFaucet, ERC721Upgradeable {
 
         if (totalClaimableAmount > faucetDetails.totalAmount) revert ClaimableOverflow(totalClaimableAmount, faucetDetails.totalAmount);
 
-        return totalClaimableAmount - claimedAmountForToken[_tokenID];
+        return totalClaimableAmount - faucetDetails.claimedAmount;
     }
 
     /// @dev See {IFaucet-mint}
@@ -86,9 +85,10 @@ contract ETHFaucet is IFaucet, ERC721Upgradeable {
         if (msg.sender != ownerOf(_tokenID)) revert OnlyOwner(msg.sender, ownerOf(_tokenID));
         uint256 claimable = claimableAmountForFaucet(_tokenID, block.timestamp);
         _to.call{value: claimable}("");
-        claimedAmountForToken[_tokenID] += claimable;
+        FaucetDetails storage fd = faucetDetailsForToken[_tokenID];
+        fd.claimedAmount += claimable;
 
-        if (claimedAmountForToken[_tokenID] == faucetDetailsForToken[_tokenID].totalAmount) {
+        if (fd.claimedAmount == fd.totalAmount) {
             _burn(_tokenID);
         }
     }
@@ -100,7 +100,7 @@ contract ETHFaucet is IFaucet, ERC721Upgradeable {
 
         FaucetDetails memory faucetDetails = faucetDetailsForToken[_tokenID];
 
-        _remainingTokenDest.call{value: faucetDetails.totalAmount - claimedAmountForToken[_tokenID]}("");
+        _remainingTokenDest.call{value: faucetDetails.totalAmount - faucetDetails.claimedAmount}("");
 
         _burn(_tokenID);
     }
@@ -117,6 +117,5 @@ contract ETHFaucet is IFaucet, ERC721Upgradeable {
         super._burn(_tokenID);
         totalSupply--;
         delete faucetDetailsForToken[_tokenID];
-        delete claimedAmountForToken[_tokenID];
     }
 }
