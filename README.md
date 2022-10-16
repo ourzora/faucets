@@ -12,13 +12,13 @@ The Faucet contracts are deployed at the following addresses:
 
 | _Name_                       | _Goerli Address_                             | _Mainnet Address_                            |
 |------------------------------|----------------------------------------------|----------------------------------------------|
-| FaucetFactory                | `0x8e614c783dcfef3df69154cca157eaf51fc32012` | `0xd6239b155eb29a34b7e277d89f2801c614f41021` |
+| FaucetFactory                | `0x292d954447b6cd90c65a2f81fa701187979152ea` | `0x3f632c8de2598943a09e4df1ef9ca523857385c7` |
 | LinearStrategy               | `0xfd36c0b2f508e6afb4c1c66e16b45e2a61a73136` | `0xca734042f60dcb45363622571eae8a08e09c4d0e` |
 | CliffStrategy                | `0xd7cbd3911074d361ab5cd01fbcf80063d31e6ff3` | `0x8ea04aa8aa5174fe641fde342e740ea167d25fed` |
 | DailyStepStrategy            | `0x8e614c783dcfef3df69154cca157eaf51fc32012` | `0x53d83fdd793db21161c4bd663cb7382dafc90626` |
 | FaucetMetadataRenderer       | `0x1c32dafad64581af5f9b25f0ebe4d2a32ed6cc46` | `0xcd8fc518f8228f2266c7c53643d7dddac4088ca5` |
-| ETHFaucet (implementation)   | `0xd7cbd3911074d361ab5cd01fbcf80063d31e6ff3` | `0x8e5a4cd78c5960285c9f9a2efd9142e9930cad4f` |
-| ERC20Faucet (implementation) | `0xfd36c0b2f508e6afb4c1c66e16b45e2a61a73136` | `0xac83e8d852f316eb2dd85e806c1b61b682e32499` |
+| ETHFaucet (implementation)   | `0xcd8fc518f8228f2266c7c53643d7dddac4088ca5` | `0x158989b27bc55da8f7b8543292b032e954ffc1a0` |
+| ERC20Faucet (implementation) | `0x013650c57c99c4bb065e6985098a553b1823ad2c` | `0x0ca49bff08be147534640aa7ff4428de07e3dc78` |
 
 Most of the common use cases can be found below. 
 
