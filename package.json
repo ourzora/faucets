@@ -45,7 +45,7 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "build": "forge build && yarn typechain && next build",
+    "build": "next build",
     "test": "forge clean && forge test",
     "render-test": "hardhat test",
     "deployDeps:goerli": "source .env && CHAIN_ID=5 forge script ./src/scripts/DeployDeps.s.sol:DeployDeps --rpc-url $GOERLI_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 5  --broadcast --verify -vvvvv",
@@ -54,7 +54,7 @@
     "deploy:mainnet": "source .env && CHAIN_ID=1 forge script ./src/scripts/Deploy.s.sol:Deploy --rpc-url $MAINNET_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 1  --broadcast --verify -vvvvv",
     "deployStrats:mainnet": "source .env && CHAIN_ID=1 forge script ./src/scripts/DeployStrategies.s.sol:DeployStrategies --rpc-url $MAINNET_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 1  --broadcast --verify -vvvvv",
     "typechain": "typechain --target=ethers-v5 dist/artifacts/**/*.json --out-dir typechain",
-    "dev": "forge build && yarn typechain && next dev",
+    "dev": "next dev",
     "start": "next start",
     "lint": "next lint"
   },

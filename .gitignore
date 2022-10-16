@@ -3,7 +3,6 @@
 node_modules
 out
 cache
-typechain
 cache
 cache_hardhat
 dist
