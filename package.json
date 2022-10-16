@@ -45,7 +45,7 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "build": "forge build && yarn typechain --target=ethers-v5 out/**/*.json --out-dir typechain && next build",
+    "build": "forge build && yarn typechain && next build",
     "test": "forge clean && forge test",
     "render-test": "hardhat test",
     "deployDeps:goerli": "source .env && CHAIN_ID=5 forge script ./src/scripts/DeployDeps.s.sol:DeployDeps --rpc-url $GOERLI_RPC_URL --etherscan-api-key $ETHERSCAN_KEY --chain-id 5  --broadcast --verify -vvvvv",
