@@ -1,22 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useProvider, useAccount, useSigner } from 'wagmi';
 import { useRouter } from 'next/router'
 
-import { IFaucet__factory, FaucetFactory__factory } from '../../../typechain';
+import { IFaucet__factory, FaucetFactory__factory, IERC20__factory } from '../../../typechain';
 import { Page } from '../../../components/Page'
 import { Text } from '../../../components/Text';
 import { Stat } from '../../../components/Stat';
 import { ContractTransaction, providers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { formatUnits } from 'ethers/lib/utils';
+import { SubdomainCurrencySwitchContext } from '../../../providers/SubdomainCurrencySwitchProvider';
+import { USDC_ADDRESS } from '../../../constants/addresses';
 
-// TODO: Handle ERC20 Faucets
 function ClaimPage({ claimable, totalAmount }) {
-    const provider = useProvider();
     const { data: signer } = useSigner();
     const { address, isConnected } = useAccount();
     const router = useRouter()
     const [isClaiming, setIsClaiming] = useState<boolean>(false)
     const [claimTx, setClaimTx] = useState<ContractTransaction>()
+    const currency = useContext(SubdomainCurrencySwitchContext)
 
     useEffect(() => {
         if (!isConnected) {
@@ -52,11 +53,11 @@ function ClaimPage({ claimable, totalAmount }) {
             ) : (
                 <>
                     <Text>You currently have</Text>
-                    <Stat>{claimable} ETH</Stat>
+                    <Stat>{claimable} {currency.symbol}</Stat>
                     <Text>Claimable in this faucet</Text>
                     <Text>&nbsp;</Text>
                     <Text>There is still</Text>
-                    <Stat>{totalAmount} ETH</Stat>
+                    <Stat>{totalAmount} {currency.symbol}</Stat>
                     <Text>Remaining to be vested</Text>
                 </>
             )}
@@ -78,9 +79,13 @@ export async function getServerSideProps({ req, res, query }) {
     const claimable = await Faucet.claimableAmountForFaucet(query.tokenId, parseInt((Date.now().valueOf() / 1000).toString()))
     const faucetDetails = await Faucet.getFaucetDetailsForToken(query.tokenId)
     const totalAmount = faucetDetails.totalAmount.sub(faucetDetails.claimedAmount)
+    const token = await Faucet.faucetTokenAddress()
+
+    // TODO: we should fetch the number of decimals directly from the underlying token contract
+    const decimals = token.toLowerCase() === USDC_ADDRESS.toLowerCase() ? 6 : 18;
 
     // Pass data to the page via props
-    return { props: { claimable: formatEther(claimable), totalAmount: formatEther(totalAmount) } }
+    return { props: { claimable: formatUnits(claimable, decimals), totalAmount: formatUnits(totalAmount, decimals) } }
 }
 
 

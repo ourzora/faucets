@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Page } from '../components/Page'
 import { Text } from '../components/Text'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { ETH_FAUCET_ADDRESS } from '../constants/addresses';
+import { SubdomainCurrencySwitchContext } from '../providers/SubdomainCurrencySwitchProvider';
 
 
 function HomePage() {
-    const { address, isConnected } = useAccount();
+    const { isConnected } = useAccount();
     const { openConnectModal } = useConnectModal();
     const [buttons, setButtons] = useState<any>()
+    const currencyContext = useContext(SubdomainCurrencySwitchContext)
 
 
     // Use an effect to avoid react hydration errors
     useEffect(() => {
         if (isConnected) {
-            setButtons([{ label: 'Claim', href: `/claim/${ETH_FAUCET_ADDRESS}` }, { label: 'Mint', href: '/mint' }])
+            setButtons([{ label: 'Claim', href: `/claim/${currencyContext.faucetAddress}` }, { label: 'Mint', href: '/mint' }])
         } else {
             setButtons([{ label: 'Learn', href: 'https://github.com/ourzora/faucets' }, { label: 'Connect', href: '', onClick: openConnectModal }])
         }

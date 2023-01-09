@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { object as yupObj, string, number, date, InferType } from 'yup';
 import { useProvider, useAccount, useSigner } from 'wagmi';
 import { useRouter } from 'next/router'
 
-import { IFaucet__factory, FaucetFactory__factory } from '../typechain';
+import { IFaucet__factory, ERC20__factory } from '../typechain';
 import { Page } from '../components/Page'
 import { Label } from '../components/Label'
 import { Error } from '../components/Error'
@@ -12,8 +12,9 @@ import { Input } from '../components/Input'
 import { Select } from '../components/Select';
 import { Text } from '../components/Text';
 import { CLIFF_STRATEGY_ADDRESS, DAILY_STEP_STRATEGY_ADDRESS, FAUCET_FACTORY_ADDRESS, LINEAR_STRATEGY_ADDRESS } from '../constants/addresses';
-import { parseEther } from 'ethers/lib/utils';
+import { parseUnits } from 'ethers/lib/utils';
 import { ContractTransaction } from 'ethers';
+import { SubdomainCurrencySwitchContext } from '../providers/SubdomainCurrencySwitchProvider';
 
 enum VestingStrategy {
     LINEAR = "LINEAR",
@@ -28,6 +29,7 @@ function MintPage() {
     const { address, isConnected } = useAccount();
     const router = useRouter()
     const [mintTx, setMintTx] = useState<ContractTransaction>()
+    const currency = useContext(SubdomainCurrencySwitchContext);
 
 
     useEffect(() => {
@@ -41,7 +43,6 @@ function MintPage() {
         if (ensRegex.test(val)) {
             try {
                 const addr = await provider.resolveName(val)
-                console.log({ val, addr })
                 return addr
             } catch (e) {
                 console.error(e)
@@ -64,8 +65,7 @@ function MintPage() {
     type FormSchema = InferType<typeof formValidationSchema>
 
     const handleSubmit = useCallback(async (form: FormSchema) => {
-        const FaucetFactory = FaucetFactory__factory.connect(FAUCET_FACTORY_ADDRESS, provider)
-        const faucetAddress = await FaucetFactory.faucetForTokenView("0x0000000000000000000000000000000000000000");
+        const faucetAddress = currency.faucetAddress
         const Faucet = IFaucet__factory.connect(faucetAddress, signer)
 
         let recipient = await addressTransform(form.recipient);
@@ -82,8 +82,18 @@ function MintPage() {
                 strategy = DAILY_STEP_STRATEGY_ADDRESS;
                 break;
         }
-        let amount = parseEther(form.amount.toString())
-        setMintTx(await Faucet.mint(recipient, amount, expiry, strategy, true, { value: amount }));
+        let amount = parseUnits(form.amount.toString(), currency.decimals)
+
+        // If this isn't ETH we first need to check the approvals
+        if (currency.symbol !== 'ETH') {
+            const Token = ERC20__factory.connect(currency.address, signer)
+            const allowance = await Token.allowance(await signer.getAddress(), faucetAddress)
+            if (allowance.lt(amount)) {
+                await Token.approve(faucetAddress, amount)
+            }
+        }
+
+        setMintTx(await Faucet.mint(recipient, amount, expiry, strategy, true, { value: currency.symbol === 'ETH' ? amount : 0 }));
 
     }, [signer])
 
@@ -134,7 +144,7 @@ function MintPage() {
                                 <option value={VestingStrategy.DAILY}>Daily Step Strategy</option>
                             </Field>
                             <ErrorMessage name="strategy" component={Error} />
-                            <Label>ETH Amount</Label>
+                            <Label>{currency.symbol} Amount</Label>
                             <Field type="text" name="amount" component={Input} />
                             <ErrorMessage name="amount" component={Error} />
                         </Form>

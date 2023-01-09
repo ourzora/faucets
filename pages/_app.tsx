@@ -12,6 +12,7 @@ import {
     RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import SubdomainCurrencySwitchProvider from '../providers/SubdomainCurrencySwitchProvider';
 
 const { chains, provider } = configureChains(
     [chain.mainnet, chain.goerli],
@@ -35,7 +36,9 @@ function MyApp({ Component, pageProps }) {
     return (
         <WagmiConfig client={client}>
             <RainbowKitProvider chains={chains}>
-                <Component {...pageProps} />
+                <SubdomainCurrencySwitchProvider>
+                    <Component {...pageProps} />
+                </SubdomainCurrencySwitchProvider>
             </RainbowKitProvider>
         </WagmiConfig>
     )

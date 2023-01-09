@@ -5,3 +5,6 @@ export const DAILY_STEP_STRATEGY_ADDRESS = process.env.NEXT_PUBLIC_CHAIN_ID === 
 
 // TODO: this can be removed when multiple ERC-20s are supported and we're dynamically fetching faucet addrs
 export const ETH_FAUCET_ADDRESS = process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? '0x5832058C888872E08cD7DD4AFBC3c48d6D56E32F' : '0xbB57CfdB2F4Be1Db46F2e74a9e9772aBcd593E2F'
+export const USDC_FAUCET_ADDRESS = process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? '0xbE5DC746ACA06ab8c722c753E21938BBF0947d80' : '0x724948deA6b56a9D27625b0C10f444850d1d9F72'
+export const ETH_ADDRESS = '0x0000000000000000000000000000000000000000'
+export const USDC_ADDRESS = process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' : '0x07865c6e87b9f70255377e024ace6630c1eaa37f'
