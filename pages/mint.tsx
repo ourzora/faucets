@@ -89,7 +89,7 @@ function MintPage() {
             const Token = ERC20__factory.connect(currency.address, signer)
             const allowance = await Token.allowance(await signer.getAddress(), faucetAddress)
             if (allowance.lt(amount)) {
-                await Token.approve(faucetAddress, amount)
+                await (await Token.approve(faucetAddress, amount)).wait()
             }
         }
 
