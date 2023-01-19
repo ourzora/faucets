@@ -16,9 +16,8 @@ import SubdomainCurrencySwitchProvider from '../providers/SubdomainCurrencySwitc
 
 const { chains, provider } = configureChains(
     [chain.mainnet, chain.goerli],
-    [
-        publicProvider()
-    ]
+    [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY }), publicProvider()],
+
 );
 
 const { connectors } = getDefaultWallets({
