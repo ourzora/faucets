@@ -70,12 +70,6 @@ export async function getServerSideProps({ req, res, query }) {
     const provider = new providers.JsonRpcProvider(process.env.RPC_URL)
     const Faucet = IFaucet__factory.connect(query.faucetAddress as string, provider)
 
-    // Cache for 1 minute
-    res.setHeader(
-        'Cache-Control',
-        'public, s-maxage=10, stale-while-revalidate=59'
-    )
-
     const claimable = await Faucet.claimableAmountForFaucet(query.tokenId, parseInt((Date.now().valueOf() / 1000).toString()))
     const faucetDetails = await Faucet.getFaucetDetailsForToken(query.tokenId)
     const totalAmount = faucetDetails.totalAmount.sub(faucetDetails.claimedAmount)
